@@ -42,16 +42,3 @@ IntelliBlog CMS is a modern, lightweight blogging platform aimed at individual c
 ### API Layer
 - REST or GraphQL APIs
 - JWT token-based authentication
-
----
-
-## Tech Stack
-
-- **Frontend:** Next.js (React) or Nuxt (Vue)
-- **Backend:** Node.js (Express/NestJS)
-- **Database:** PostgreSQL or MongoDB
-- **Auth:** Auth.js, Firebase Auth, or custom JWT
-- **Storage:** Cloudinary / AWS S3
-- **Deployment:** Vercel / Netlify (frontend), Render / Railway / DO (backend)
-
----
