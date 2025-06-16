@@ -1,32 +1,50 @@
-﻿namespace IntelliBlog_backend.Infrastructure.Database;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class User
+namespace IntelliBlog_backend.Infrastructure.Database;
+
+public sealed class Role
 {
-    public Guid Id { get; set; }
-    public required string Firstname { get; set; }
-    public required string LastName { get; set; }
-    public required string Email { get; set; }
+    public Guid Id { get; init; }
+    [MaxLength(20)]
+    public required string Name { get; init; }
+    public required DateTime CreatedAt { get; init; }
+    public required DateTime UpdatedAt { get; init; }
+}
+public sealed class User
+{
+    public Guid Id { get; init; }
+    [MaxLength(20)]
+    public required string Firstname { get; init; }
+    [MaxLength(20)]
+    public required string LastName { get; init; }
+    [MaxLength(20), EmailAddress]
+    public required string Email { get; init; }
+    [MinLength(20), MaxLength(500)]
     public required string Password { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required DateTime UpdatedAt { get; set; }
-    public virtual string FullName => $"{Firstname} {LastName}";
+    public required DateTime CreatedAt { get; init; }
+    public required DateTime UpdatedAt { get; init; }
+    public string FullName => $"{Firstname} {LastName}";
+    public ICollection<Blog> Blogs { get; set; } = new List<Blog>();
 }
-public class Blog
+public sealed class Blog
 {
-    public Guid Id { get; set; }
-    public required string Name { get; set; }
-    public required string Description { get; set; }
-    public required string OwnerId { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required DateTime UpdatedAt { get; set; }
-}
-public class Post
-{
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
+    [MaxLength(20)]
     public required string Title { get; set; }
+    [MaxLength(1000)]
+    public required string Description { get; set; }
+    public required DateTime CreatedAt { get; init; }
+    public required DateTime UpdatedAt { get; init; }
+}
+public sealed class Post
+{
+    public Guid Id { get; init; }
+    [MaxLength(20)]
+    public required string Title { get; set; }
+    [MaxLength(20)]
     public required string Content { get; set; }
-    public required string AuthorId { get; set; }
+    [MaxLength(20)]
     public required int Likes { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required DateTime UpdatedAt { get; set; }
+    public required DateTime CreatedAt { get; init; }
+    public required DateTime UpdatedAt { get; init; }
 }
