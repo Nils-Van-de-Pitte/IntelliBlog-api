@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliBlog-backend", "IntelliBlog-backend\IntelliBlog-backend.csproj", "{3C80C4B5-71E6-496F-86DD-F9110CCAC756}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C80C4B5-71E6-496F-86DD-F9110CCAC756}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C80C4B5-71E6-496F-86DD-F9110CCAC756}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C80C4B5-71E6-496F-86DD-F9110CCAC756}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C80C4B5-71E6-496F-86DD-F9110CCAC756}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
