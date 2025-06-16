@@ -8,9 +8,11 @@ public static class Dependencies
     /// Configures the service collection with required dependencies for the application.
     /// </summary>
     /// <param name="services">The service collection to configure.</param>
-    public static void UseDependencies(this IServiceCollection services)
+    /// <param name="configuration"></param>
+    public static void UseDependencies(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddOpenApi();
         services.AddFastEndpoints();
+        services.AddBloggingContext(configuration);
     }
 }

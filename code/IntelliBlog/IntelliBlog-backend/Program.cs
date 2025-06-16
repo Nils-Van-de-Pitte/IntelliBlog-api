@@ -2,7 +2,7 @@ using IntelliBlog_backend.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.UseDependencies();
+builder.Services.UseDependencies(builder.Configuration);
 
 var app = builder.Build();
 
