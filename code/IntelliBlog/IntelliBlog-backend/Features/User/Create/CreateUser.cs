@@ -27,8 +27,12 @@ public static class CreateUser
         /// </returns>
         public override async Task HandleAsync(Request request, CancellationToken ct)
         {
-            var response = new Response(Guid.NewGuid(), request.Name, request.Email);
-            await SendOkAsync(response, ct);
+            // Add a user here
+            await SendAsync(new Response(
+                Id: Guid.NewGuid(),
+                Name: request.Name,
+                Email: request.Email
+            ), 201, ct);
         }
     }
 }
