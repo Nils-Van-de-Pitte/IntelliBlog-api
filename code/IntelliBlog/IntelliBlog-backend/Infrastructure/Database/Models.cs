@@ -21,6 +21,7 @@ public sealed class User
     public required string Email { get; init; }
     [MinLength(20), MaxLength(500)]
     public required string Password { get; set; }
+    public required Role Role { get; set; }
     public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; init; }
     public string FullName => $"{Firstname} {LastName}";
