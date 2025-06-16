@@ -1,4 +1,6 @@
-﻿namespace IntelliBlog_backend.Extensions;
+﻿using FastEndpoints;
+
+namespace IntelliBlog_backend.Extensions;
 
 public static class Dependencies
 {
@@ -9,6 +11,6 @@ public static class Dependencies
     public static void UseDependencies(this IServiceCollection services)
     {
         services.AddOpenApi();
-        // Add all dependencies here
+        services.AddFastEndpoints();
     }
 }
