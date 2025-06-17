@@ -6,11 +6,11 @@ public sealed class PasswordHasher : IPasswordHasher
 {
     public string HashPassword(string password)
     {
-        throw new NotImplementedException();
+        return BCrypt.Net.BCrypt.HashPassword(password);
     }
 
     public bool VerifyPassword(string password, string hashedPassword)
     {
-        throw new NotImplementedException();
+        return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
     }
 }
