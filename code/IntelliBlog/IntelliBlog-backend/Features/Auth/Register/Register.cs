@@ -10,19 +10,18 @@ public static class Register
     public record Request(string FirstName, string LastName, string Email, string Password);
     public record Response(string Message);
 
-    public class Endpoint(BloggingContext context, IPasswordHasher passwordHasher) : Endpoint<Request, Response>
+    public sealed class Endpoint(BloggingContext context, IPasswordHasher passwordHasher) : Endpoint<Request, Response>
     {
         
         private readonly BloggingContext _context = context;
         private readonly IPasswordHasher _passwordHasher = passwordHasher;
-
-
+        
         /// Configures the endpoint route for user registration.
         public override void Configure()
         {
             Post("/api/v1/auth/register");
             AllowAnonymous();
-            Tags("Register");
+            Tags("Auth");
         }
         
         /// Handles the user registration request and processes the creation of a new user.
@@ -35,8 +34,8 @@ public static class Register
 
             if (defaultRole == null)
             {
-                await SendAsync(new Response("Default role not found!"), 500, ct);
-                return;           
+                await SendErrorsAsync(404, ct);
+                return;
             }
             
             var user = new User
