@@ -3,9 +3,9 @@ using IntelliBlog_backend.Domain.Interfaces;
 using IntelliBlog_backend.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace IntelliBlog_backend.Features.Users.Create;
+namespace IntelliBlog_backend.Features.Auth.Register;
 
-public static class CreateUser
+public static class Register
 {
     public record Request(string FirstName, string LastName, string Email, string Password);
     public record Response(string Message);
