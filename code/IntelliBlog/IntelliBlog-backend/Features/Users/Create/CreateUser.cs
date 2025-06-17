@@ -31,7 +31,7 @@ public static class CreateUser
         /// <return>A task representing the asynchronous operation that returns a response with the newly created user details.</return>
         public override async Task HandleAsync(Request request, CancellationToken ct)
         {
-            var defaultRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User", ct);
+            var defaultRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "user", ct);
 
             if (defaultRole == null)
             {
@@ -54,7 +54,7 @@ public static class CreateUser
             _context.Users.Add(user);
             await _context.SaveChangesAsync(ct);
             
-            await SendAsync(new Response("Users has been successfully created!"), 201, ct);
+            await SendAsync(new Response("User has been successfully created!"), 201, ct);
         }
     }
 }
