@@ -10,8 +10,10 @@ public static class Authentication
     /// <param name="services">The service collection to which the security configurations will be added.</param>
     public static void AddSecurity(this IServiceCollection services)
     {
+        services.AddAuthenticationCookie(validFor: TimeSpan.FromMinutes(10));
         services.AddAuthenticationJwtBearer(s => s.SigningKey = "The secret used to sign the JWT");
-        services.AddAuthorization();
+        services.AddAuthorizationBuilder()
+            .AddPolicy("Users", policy => policy.RequireRole("user"));
     }
 
     /// <summary>
