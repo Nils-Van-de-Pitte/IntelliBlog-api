@@ -10,8 +10,6 @@ var app = builder.Build();
 
 app.UseRoutes();
 
-app.UseFastEndpoint();
-
 app.UseScalar();
 
 app.UseHttpsRedirection();

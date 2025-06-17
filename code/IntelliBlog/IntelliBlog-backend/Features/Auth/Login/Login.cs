@@ -20,6 +20,10 @@ public static class Login
             Post("/api/v1/auth/login");
             AllowAnonymous();
             Tags("Auth");
+            Throttle(
+                hitLimit: 15,
+                durationSeconds: 10
+            );
         }
 
         /// Handles the login request and processes user authentication.
