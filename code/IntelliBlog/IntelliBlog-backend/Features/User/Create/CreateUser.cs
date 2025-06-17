@@ -17,14 +17,11 @@ public static class CreateUser
             Tags("Register");
         }
 
-        /// Handles the user registration process by processing the incoming request and returning a response.
-        /// <param name="request">
-        /// The incoming request containing user details such as name, email, and password for registration.
-        /// </param>
-        /// <param name="ct"></param>
-        /// <returns>
-        /// A result object containing the user details including ID, name, and email if registration is successful.
-        /// </returns>
+
+        /// Handles the user registration request and processes the creation of a new user.
+        /// <param name="request">The user registration request containing Name, Email, and Password.</param>
+        /// <param name="ct">The cancellation token for the asynchronous operation.</param>
+        /// <return>A task representing the asynchronous operation that returns a response with the newly created user details.</return>
         public override async Task HandleAsync(Request request, CancellationToken ct)
         {
             // Add a user here
