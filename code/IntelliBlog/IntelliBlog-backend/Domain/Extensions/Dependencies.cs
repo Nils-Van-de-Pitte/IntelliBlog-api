@@ -1,7 +1,6 @@
 ﻿using FastEndpoints;
 using IntelliBlog_backend.Domain.Extensions.Security;
 using IntelliBlog_backend.Domain.Interfaces;
-using IntelliBlog_backend.Extensions;
 using IntelliBlog_backend.Infrastructure.Security;
 
 namespace IntelliBlog_backend.Domain.Extensions;

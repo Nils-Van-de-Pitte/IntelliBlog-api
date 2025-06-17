@@ -1,7 +1,7 @@
 ﻿using IntelliBlog_backend.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace IntelliBlog_backend.Extensions;
+namespace IntelliBlog_backend.Domain.Extensions;
 
 public static class BloggingContextExtension
 {

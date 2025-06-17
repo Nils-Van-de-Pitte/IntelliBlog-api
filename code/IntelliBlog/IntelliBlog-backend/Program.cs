@@ -1,6 +1,5 @@
 using IntelliBlog_backend.Domain.Extensions;
 using IntelliBlog_backend.Domain.Extensions.Security;
-using IntelliBlog_backend.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
