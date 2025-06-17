@@ -1,6 +1,8 @@
 ﻿using FastEndpoints;
+using FastEndpoints.Security;
 using IntelliBlog_backend.Domain.Interfaces;
 using IntelliBlog_backend.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace IntelliBlog_backend.Features.Auth.Login;
 
@@ -32,12 +34,50 @@ public static class Login
         /// <return>A task representing the asynchronous operation, yielding a response containing a message and a token upon success.</return>
         public override async Task HandleAsync(LoginReq req, CancellationToken ct)
         {
-            var existingEmail = _context.Users.FirstOrDefault(u => u.Email == req.Email);
-            if (existingEmail == null) {await SendErrorsAsync(409, ct); return;}
-            var user = _context.Users.FirstOrDefault(u => u.Email == req.Email);
-            var passwordMatches = _passwordHasher.VerifyPassword(req.Password, user?.Password!);
-            if (!passwordMatches) {await SendErrorsAsync(409, ct); return; }
-            await SendAsync(new LoginRes("User has been successfully logged in!", "token"), 200, ct);
+            try
+            {
+                var user = _context.Users.Include(u => u.Role).FirstOrDefault(u => u.Email == req.Email);
+                if (user == null)
+                {
+                    AddError("Invalid email or password.");
+                    await SendErrorsAsync(409, ct);
+                    return;
+                }
+                var passwordMatches = _passwordHasher.VerifyPassword(req.Password, user?.Password!);
+                if (!passwordMatches)
+                {
+                    AddError("Invalid email or password.");
+                    await SendErrorsAsync(409, ct);
+                    return;
+                }
+
+                var token = GenerateJwt(user!);
+                await SendAsync(new LoginRes("User has been successfully logged in!", token), 200, ct);
+            }
+            catch (Exception e)
+            {
+                AddError("An error occurred while processing your request.");
+                AddError(e.Message);
+                await SendErrorsAsync(500, ct);
+            }
+        }
+
+        /// Generates a JWT (JSON Web Token) for the specified user, containing claims such as email, roles,
+        /// user ID, and an expiration time.
+        /// <param name="user">The user for whom the JWT is being generated. The user's role and email
+        /// are included as claims in the token.</param>
+        /// <returns>A string representing the generated JWT, signed and encoded, with the user's claims and expiration time.</returns>
+        private static string GenerateJwt(User user)
+        {
+            var jwtToken = JwtBearer.CreateToken(o =>
+            {
+                o.SigningKey = "The secret used to sign the JWT and so finally secure the user's data after 539 attempts";
+                o.ExpireAt = DateTime.UtcNow.AddDays(1);
+                o.User.Roles.Add(user.Role.Name);
+                o.User.Claims.Add(("Email", user.Email));
+                o.User["UserId"] = user.Id.ToString();
+            });
+            return jwtToken;
         }
     }
 }
