@@ -22,6 +22,10 @@ public static class Register
             Post("/api/v1/auth/register");
             AllowAnonymous();
             Tags("Auth");
+            Throttle(
+                hitLimit: 15,
+                durationSeconds: 10
+            );
         }
         
         /// Handles the user registration request and processes the creation of a new user.
