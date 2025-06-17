@@ -1,6 +1,6 @@
 ﻿using FastEndpoints;
 
-namespace IntelliBlog_backend.Extensions;
+namespace IntelliBlog_backend.Domain.Extensions;
 
 public static class Routes
 {
@@ -10,6 +10,7 @@ public static class Routes
     /// <param name="app">The web application to configure with routes.</param>
     public static void UseRoutes(this WebApplication app)
     {
-        app.UseFastEndpoints();
+        app.UseResponseCaching()
+        .UseFastEndpoints();
     }
 }
