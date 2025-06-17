@@ -1,4 +1,5 @@
 ﻿using FastEndpoints;
+using IntelliBlog_backend.Domain.Extensions.Security;
 using IntelliBlog_backend.Domain.Interfaces;
 using IntelliBlog_backend.Extensions;
 using IntelliBlog_backend.Infrastructure.Security;
@@ -15,6 +16,7 @@ public static class Dependencies
     public static void AddDependencies(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddOpenApi();
+        services.AddSecurity();
         services.AddFastEndpoints();
         services.AddBloggingContext(configuration);
     }
