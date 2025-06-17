@@ -11,10 +11,11 @@ public static class Login
     public record LoginReq(string Email, string Password);
     public record LoginRes(string Message, string? Token);
 
-    public sealed class Endpoint(IPasswordHasher passwordHasher, BloggingContext context) : Endpoint<LoginReq, LoginRes>
+    public sealed class Endpoint(IPasswordHasher passwordHasher, BloggingContext context, IConfiguration configuration) : Endpoint<LoginReq, LoginRes>
     {
         private readonly BloggingContext _context = context;
         private readonly IPasswordHasher _passwordHasher = passwordHasher;
+        private readonly IConfiguration _configuration = configuration;
         
         /// Configures the endpoint route for user login.
         public override void Configure()
@@ -43,7 +44,7 @@ public static class Login
                     await SendErrorsAsync(409, ct);
                     return;
                 }
-                var passwordMatches = _passwordHasher.VerifyPassword(req.Password, user?.Password!);
+                var passwordMatches = _passwordHasher.VerifyPassword(req.Password, user.Password);
                 if (!passwordMatches)
                 {
                     AddError("Invalid email or password.");
@@ -51,13 +52,16 @@ public static class Login
                     return;
                 }
 
-                var token = GenerateJwt(user!);
+                var token = GenerateJwt(user);
                 await SendAsync(new LoginRes("User has been successfully logged in!", token), 200, ct);
             }
             catch (Exception e)
             {
                 AddError("An error occurred while processing your request.");
-                AddError(e.Message);
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+                {
+                    AddError(e.Message);
+                }
                 await SendErrorsAsync(500, ct);
             }
         }
@@ -67,11 +71,12 @@ public static class Login
         /// <param name="user">The user for whom the JWT is being generated. The user's role and email
         /// are included as claims in the token.</param>
         /// <returns>A string representing the generated JWT, signed and encoded, with the user's claims and expiration time.</returns>
-        private static string GenerateJwt(User user)
+        private string GenerateJwt(User user)
         {
             var jwtToken = JwtBearer.CreateToken(o =>
             {
-                o.SigningKey = "The secret used to sign the JWT and so finally secure the user's data after 539 attempts";
+                o.SigningKey = _configuration["JWT_SECRET"] ?? throw new InvalidOperationException("JWT_SECRET not configured");
+                // TODO make this an secret
                 o.ExpireAt = DateTime.UtcNow.AddDays(1);
                 o.User.Roles.Add(user.Role.Name);
                 o.User.Claims.Add(("Email", user.Email));
