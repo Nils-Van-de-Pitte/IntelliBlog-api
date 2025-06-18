@@ -45,14 +45,14 @@ public static class Login
                 if (user == null)
                 {
                     AddError("Invalid email or password.");
-                    await SendErrorsAsync(409, ct);
+                    await SendErrorsAsync(401, ct);
                     return;
                 }
                 var passwordMatches = _passwordHasher.VerifyPassword(req.Password, user.Password);
                 if (!passwordMatches)
                 {
                     AddError("Invalid email or password.");
-                    await SendErrorsAsync(409, ct);
+                    await SendErrorsAsync(401, ct);
                     return;
                 }
 
