@@ -21,11 +21,11 @@ public sealed class CookieService(IHttpContextAccessor httpContextAccessor) : IC
 
     public string? GetCookie(string key)
     {
-        throw new NotImplementedException();
+        return _httpContextAccessor.HttpContext!.Request.Cookies[key];
     }
 
     public void DeleteCookie(string key)
     {
-        throw new NotImplementedException();
+        _httpContextAccessor.HttpContext!.Response.Cookies.Delete(key);
     }
 }
