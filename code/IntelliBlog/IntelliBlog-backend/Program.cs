@@ -1,5 +1,5 @@
 using IntelliBlog_backend.Domain.Extensions;
-using IntelliBlog_backend.Extensions;
+using IntelliBlog_backend.Domain.Extensions.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +11,8 @@ var app = builder.Build();
 app.UseRoutes();
 
 app.UseScalar();
+
+app.UseSecurity();
 
 app.UseHttpsRedirection();
 

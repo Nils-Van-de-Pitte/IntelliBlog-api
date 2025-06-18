@@ -1,6 +1,6 @@
 ﻿using Scalar.AspNetCore;
 
-namespace IntelliBlog_backend.Extensions;
+namespace IntelliBlog_backend.Domain.Extensions;
 
 public static class Scalar
 {
