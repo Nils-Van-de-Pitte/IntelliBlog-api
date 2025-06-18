@@ -9,7 +9,7 @@ namespace IntelliBlog_backend.Features.Auth.Login;
 public static class Login
 {
     public record LoginReq(string Email, string Password);
-    public record LoginRes(string Message);
+    public record LoginRes(string Message, string Token);
 
     public sealed class Endpoint(IPasswordHasher passwordHasher, BloggingContext context, IConfiguration configuration) : Endpoint<LoginReq, LoginRes>
     {
@@ -21,7 +21,7 @@ public static class Login
         public override void Configure()
         {
             Post("/api/v1/auth/login");
-            Policies("Users");
+            AllowAnonymous();
             Tags("Auth");
             Throttle(
                 hitLimit: 15,
@@ -51,9 +51,8 @@ public static class Login
                     await SendErrorsAsync(409, ct);
                     return;
                 }
-
-                GenerateJwt(user);
-                await SendAsync(new LoginRes("User has been successfully logged in!"), 200, ct);
+                var token = GenerateJwt(user);
+                await SendAsync(new LoginRes("User has been successfully logged in!", token), 200, ct);
             }
             catch (Exception e)
             {
@@ -71,13 +70,25 @@ public static class Login
         /// <param name="user">The user for whom the JWT is being generated. The user's role and email
         /// are included as claims in the token.</param>
         /// <returns>A string representing the generated JWT, signed and encoded, with the user's claims and expiration time.</returns>
-        private static void GenerateJwt(User user)
+        private string GenerateJwt(User user)
         {
-            CookieAuth.SignInAsync(o =>
+            var token = JwtBearer.CreateToken(options =>
             {
-                o.Roles.Add(user.Role.Name);
-                o.Claims.Add(("Email", user.Email));
+                options.SigningKey = GetJwtSigningKey();
+                options.ExpireAt = DateTime.UtcNow.AddDays(1);
+                options.User.Roles.Add(user.Role.Name);
+                options.User.Claims.Add(("Email", user.Email));
+                options.User["UserId"] = user.Id.ToString();
             });
+            return token;
+        }
+
+        /// Retrieves the signing key used for generating JWT tokens.
+        /// <return>The signing key value as a string.</return>
+        private string GetJwtSigningKey()
+        {
+            return (_configuration["JWT_SECRET"] ?? Environment.GetEnvironmentVariable("JWT_SECRET")) 
+                   ?? throw new InvalidOperationException("JWT_SECRET not configured");
         }
     }
 }

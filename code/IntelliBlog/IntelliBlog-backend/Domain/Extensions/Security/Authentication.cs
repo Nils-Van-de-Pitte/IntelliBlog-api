@@ -13,7 +13,10 @@ public static class Authentication
         services.AddAuthenticationCookie(validFor: TimeSpan.FromMinutes(10));
         services.AddAuthenticationJwtBearer(s => s.SigningKey = "The secret used to sign the JWT");
         services.AddAuthorizationBuilder()
-            .AddPolicy("Users", policy => policy.RequireRole("user"));
+            .AddPolicy("Users", policy => policy.RequireRole("user"))
+            .AddPolicy("Admin", policy => policy.RequireRole("admin"));
+        
+        
     }
 
     /// <summary>
