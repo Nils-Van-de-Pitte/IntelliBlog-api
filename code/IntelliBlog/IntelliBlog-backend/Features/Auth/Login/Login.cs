@@ -23,7 +23,10 @@ public static class Login
         {
             Post("/api/v1/auth/login");
             AllowAnonymous();
-            Tags("Auth");
+            Description(options =>
+            {
+                options.WithSummary("Login into IntelliBlog");
+            });
             Throttle(
                 hitLimit: 15,
                 durationSeconds: 10
