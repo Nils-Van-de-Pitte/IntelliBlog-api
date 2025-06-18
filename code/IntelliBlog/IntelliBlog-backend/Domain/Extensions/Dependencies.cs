@@ -2,6 +2,7 @@
 using IntelliBlog_backend.Domain.Extensions.Security;
 using IntelliBlog_backend.Domain.Interfaces;
 using IntelliBlog_backend.Infrastructure.Security;
+using IntelliBlog_backend.Infrastructure.Services;
 
 namespace IntelliBlog_backend.Domain.Extensions;
 
@@ -26,6 +27,8 @@ public static class Dependencies
     /// <param name="services">The service collection to which the services will be registered.</param>
     public static void RegisterServices(this IServiceCollection services)
     {
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<ICookieService, CookieService>();
     }
 }
