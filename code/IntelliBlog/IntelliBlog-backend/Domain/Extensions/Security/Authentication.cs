@@ -1,4 +1,5 @@
 ﻿using FastEndpoints.Security;
+using IntelliBlog_backend.Infrastructure.Middleware;
 
 namespace IntelliBlog_backend.Domain.Extensions.Security;
 
@@ -10,13 +11,19 @@ public static class Authentication
     /// <param name="services">The service collection to which the security configurations will be added.</param>
     public static void AddSecurity(this IServiceCollection services)
     {
-        services.AddAuthenticationCookie(validFor: TimeSpan.FromMinutes(10));
         services.AddAuthenticationJwtBearer(s => s.SigningKey = "The secret used to sign the JWT");
+        services.AddAuthentication("token")
+            .AddCookie("token", options =>
+            {
+                options.LoginPath = "/api/v1/auth/login";
+                options.Cookie.Name = "token";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                options.ExpireTimeSpan = TimeSpan.FromHours(1);
+            });
         services.AddAuthorizationBuilder()
             .AddPolicy("Users", policy => policy.RequireRole("user"))
-            .AddPolicy("Admin", policy => policy.RequireRole("admin"));
-        
-        
+            .AddPolicy("Admins", policy => policy.RequireRole("admin"));
     }
 
     /// <summary>
@@ -27,5 +34,6 @@ public static class Authentication
     {
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseMiddleware<JwtFromCookieMiddleware>();
     }
 }
