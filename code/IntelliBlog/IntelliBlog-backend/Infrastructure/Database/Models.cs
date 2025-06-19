@@ -34,8 +34,10 @@ public sealed class Blog
     public required string Title { get; set; }
     [MaxLength(1000)]
     public required string Description { get; set; }
+    public required Guid UserId { get; set; }
+    public ICollection<Post> Posts { get; set; } = new List<Post>();
     public required DateTime CreatedAt { get; init; }
-    public required DateTime UpdatedAt { get; init; }
+    public required DateTime UpdatedAt { get; init; } 
 }
 public sealed class Post
 {
@@ -46,6 +48,7 @@ public sealed class Post
     public required string Content { get; set; }
     [MaxLength(20)]
     public required int Likes { get; set; }
+    public required Guid BlogId { get; set; }
     public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; init; }
 }
