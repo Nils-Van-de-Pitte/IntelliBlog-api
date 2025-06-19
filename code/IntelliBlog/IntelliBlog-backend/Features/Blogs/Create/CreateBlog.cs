@@ -1,4 +1,5 @@
 ﻿using FastEndpoints;
+using FluentValidation;
 using IntelliBlog_backend.Infrastructure.Database;
 
 namespace IntelliBlog_backend.Features.Blogs.Create;
@@ -69,6 +70,23 @@ public class CreateBlog
                 }
                 await SendErrorsAsync(500, ct);
             }
+        }
+    }
+    
+    public class Validator : Validator<BlogReq>
+    {
+        public Validator()
+        {
+            RuleFor(x => x.Title)
+                .NotEmpty()
+                .WithMessage("Title is required.")
+                .MaximumLength(20)
+                .WithMessage("Title cannot exceed 20 characters.");
+            RuleFor(x => x.Description)
+                .NotEmpty()
+                .WithMessage("Description is required.")
+                .MaximumLength(1000)
+                .WithMessage("Description cannot exceed 1000 characters.");
         }
     }
 }
