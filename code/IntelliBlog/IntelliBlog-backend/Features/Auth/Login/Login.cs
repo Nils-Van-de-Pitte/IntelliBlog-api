@@ -1,5 +1,6 @@
 ﻿using FastEndpoints;
 using FastEndpoints.Security;
+using FluentValidation;
 using IntelliBlog_backend.Domain.Interfaces;
 using IntelliBlog_backend.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
@@ -94,6 +95,19 @@ public static class Login
         {
             return (_configuration["JWT_SECRET"] ?? Environment.GetEnvironmentVariable("JWT_SECRET")) 
                    ?? throw new InvalidOperationException("JWT_SECRET not configured");
+        }
+    }
+
+    public class Validation : Validator<LoginReq>
+    {
+        public Validation()
+        {
+            RuleFor(x => x.Email)
+                .NotEmpty()
+                .WithMessage("Email is required.");
+            RuleFor(x => x.Password)
+                .NotEmpty()
+                .WithMessage("Password is required.");
         }
     }
 }
