@@ -25,5 +25,24 @@ public class CreatePost
                 durationSeconds: 10
             );
         }
+
+        public override async Task HandleAsync(PostReq request, CancellationToken ct)
+        {
+            var post = new Post
+            {
+                Id = Guid.NewGuid(),
+                Title = request.Title,
+                Content = request.Content,
+                Likes = 0,
+                BlogId = Guid.NewGuid(),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+            
+            await _context.Posts.AddAsync(post, ct);
+            await _context.SaveChangesAsync(ct);
+            
+            await SendAsync(new PostRes("Post has been successfully created!"), 201, ct);
+        }
     }
 }
