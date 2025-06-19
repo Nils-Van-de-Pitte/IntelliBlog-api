@@ -45,7 +45,7 @@ public class CreateBlog
                 }
                 
                 // Hardcode for testing purposes
-                var userId = Guid.Parse("94fa325a-ac4d-4a74-b57b-9c3145e4592d"); //TODO when you find the JWT, insert the ID here instead
+                var userId = Guid.Parse("d3c6d755-48d2-4062-9ab9-e3577d8efdb4"); //TODO when you find the JWT, insert the ID here instead
                 
                 var blog = new Blog
                 {
