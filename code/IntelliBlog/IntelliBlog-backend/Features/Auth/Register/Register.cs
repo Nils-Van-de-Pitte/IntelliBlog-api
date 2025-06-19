@@ -21,7 +21,7 @@ public static class Register
         public override void Configure()
         {
             Post("/api/v1/auth/register");
-            Policies("Users");
+            AllowAnonymous();
             Tags("Auth");
             Throttle(
                 hitLimit: 15,
