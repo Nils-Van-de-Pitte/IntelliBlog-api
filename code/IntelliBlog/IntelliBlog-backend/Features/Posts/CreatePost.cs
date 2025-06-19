@@ -9,10 +9,21 @@ public class CreatePost
     public record PostReq(string Title, string Content);
     public record PostRes(string Message);
 
+    /// <summary>
+    /// Represents an HTTP endpoint for creating new blog posts in the system.
+    /// </summary>
+    /// <remarks>
+    /// This class defines the behavior and configuration of the endpoint, including routing, access control, request validation,
+    /// and rate limiting. It processes requests from clients to create posts, interacts with the database for persistence,
+    /// and provides appropriate success or error responses.
+    /// </remarks>
     public sealed class Endpoint(BloggingContext context) : Endpoint<PostReq, PostRes> 
     {
         private readonly BloggingContext _context = context;
 
+        /// <summary>
+        /// Configures the endpoint for handling HTTP POST requests to create new blog posts, including route definition, access settings, description, and rate limiting.
+        /// </summary>
         public override void Configure()
         {
             Post("/api/v1/post");
@@ -27,6 +38,12 @@ public class CreatePost
             );
         }
 
+        /// <summary>
+        /// Handles the asynchronous creation of a new blog post, including validation, database persistence, and response generation.
+        /// </summary>
+        /// <param name="request">The request object containing the title and content of the post.</param>
+        /// <param name="ct">The cancellation token used to propagate notifications of request cancellation.</param>
+        /// <returns>A task that represents the asynchronous operation. On success, a response with a success message is sent. On failure, appropriate error responses are sent.</returns>
         public override async Task HandleAsync(PostReq request, CancellationToken ct)
         {
             try
@@ -67,12 +84,21 @@ public class CreatePost
                 }
                 await SendErrorsAsync(500, ct);
             }
-            
         }
     }
 
+    /// <summary>
+    /// Provides validation rules for the CreatePost feature, ensuring the integrity and consistency of user input
+    /// for creating a new post.
+    /// </summary>
+    /// <remarks>
+    /// The validation rules include checks for required fields and constraints on the maximum length of the content.
+    /// </remarks>
     public sealed class Validation : Validator<PostReq>
     {
+        /// <summary>
+        /// Represents the validation logic for the CreatePost feature, ensuring that the required fields for creating a new blog post are properly validated.
+        /// </summary>
         public Validation()
         {
             RuleFor(x => x.Title)
