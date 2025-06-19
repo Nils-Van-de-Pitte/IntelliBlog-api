@@ -31,13 +31,25 @@ public class CreatePost
         {
             try
             {
+                var postExists = _context.Posts.Any(p => p.Title == request.Title);
+                
+                if (postExists)
+                {
+                    AddError("Post with this title already exists.");
+                    await SendErrorsAsync(409, ct);
+                    return;
+                }
+                
+                // Hardcode for testing purposes
+                var blogId = Guid.Parse("29b038ca-2981-4d61-b8c8-19e294bc7b6f"); //TODO when you find the JWT, insert the ID here instead
+
                 var post = new Post
                 {
                     Id = Guid.NewGuid(),
                     Title = request.Title,
                     Content = request.Content,
                     Likes = 0,
-                    BlogId = Guid.NewGuid(),
+                    BlogId = blogId,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };
