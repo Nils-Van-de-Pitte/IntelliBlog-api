@@ -15,7 +15,8 @@ public static class Dependencies
     /// <param name="configuration">The configuration interface to retrieve configuration settings.</param>
     public static void AddDependencies(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddOpenApi();
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
         services.AddSecurity();
         services.AddFastEndpoints();
         services.AddBloggingContext(configuration);

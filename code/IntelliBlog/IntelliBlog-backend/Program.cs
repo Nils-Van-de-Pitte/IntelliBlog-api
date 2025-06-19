@@ -10,7 +10,7 @@ var app = builder.Build();
 
 app.UseRoutes();
 
-app.UseScalar();
+app.AddSwagger();
 
 app.UseSecurity();
 
