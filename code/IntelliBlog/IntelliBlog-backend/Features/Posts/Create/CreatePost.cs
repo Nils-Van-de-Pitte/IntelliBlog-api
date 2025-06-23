@@ -2,7 +2,7 @@
 using FluentValidation;
 using IntelliBlog_backend.Infrastructure.Database;
 
-namespace IntelliBlog_backend.Features.Posts;
+namespace IntelliBlog_backend.Features.Posts.Create;
 
 public class CreatePost
 {
