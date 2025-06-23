@@ -1,4 +1,5 @@
-﻿using FastEndpoints;
+﻿using System.Security.Claims;
+using FastEndpoints;
 using FluentValidation;
 using IntelliBlog_backend.Infrastructure.Database;
 
@@ -17,7 +18,7 @@ public class CreateBlog
         public override void Configure()
         {
             Post("/api/v1/blog");
-            AllowAnonymous();
+            Roles("user");
             Description(options =>
             {
                 options.WithSummary("Create a new blog");
@@ -37,6 +38,8 @@ public class CreateBlog
         {
             try
             {
+                var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+                Console.WriteLine($"Role: {userRole}");
                 var hasBlog = _context.Blogs.Any(b => b.Title == request.Title);
                 if (hasBlog)
                 {
@@ -44,15 +47,12 @@ public class CreateBlog
                     await SendErrorsAsync(409, ct);
                 }
                 
-                // Hardcode for testing purposes
-                var userId = Guid.Parse("d3c6d755-48d2-4062-9ab9-e3577d8efdb4"); //TODO when you find the JWT, insert the ID here instead
-                
                 var blog = new Blog
                 {
                     Id = Guid.NewGuid(),
                     Title = request.Title,
                     Description = request.Description,
-                    UserId = userId,
+                    UserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value),
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };

@@ -1,4 +1,5 @@
-﻿using FastEndpoints;
+﻿using System.Security.Claims;
+using FastEndpoints;
 using FastEndpoints.Security;
 using FluentValidation;
 using IntelliBlog_backend.Domain.Interfaces;
@@ -82,9 +83,10 @@ public static class Login
             {
                 options.SigningKey = GetJwtSigningKey();
                 options.ExpireAt = DateTime.UtcNow.AddDays(1);
-                options.User.Roles.Add(user.Role.Name);
-                options.User.Claims.Add(("Email", user.Email));
-                options.User["UserId"] = user.Id.ToString();
+                options.User.Claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+                options.User.Claims.Add(new Claim(ClaimTypes.Name, user.Email));
+                options.User.Claims.Add(new Claim("role", user.Role.Name));
+
             });
             _cookieService.SetCookie("token", token);
         }
