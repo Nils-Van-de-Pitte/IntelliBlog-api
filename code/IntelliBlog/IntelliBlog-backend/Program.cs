@@ -8,11 +8,11 @@ builder.Services.RegisterServices();
 
 var app = builder.Build();
 
+app.UseSecurity();
+
 app.UseRoutes();
 
 app.AddSwagger();
-
-app.UseSecurity();
 
 app.UseHttpsRedirection();
 

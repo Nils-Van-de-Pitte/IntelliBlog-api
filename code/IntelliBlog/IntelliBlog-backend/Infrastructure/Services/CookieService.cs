@@ -18,8 +18,8 @@ public sealed class CookieService(IHttpContextAccessor httpContextAccessor) : IC
         {
             Expires = DateTime.Now.AddDays(expireDays),
             HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict
+            Secure = false,
+            SameSite = SameSiteMode.Lax
         };
         
         _httpContextAccessor.HttpContext!.Response.Cookies.Append(key, value, options);

@@ -17,7 +17,7 @@ public static class Dependencies
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-        services.AddSecurity();
+        services.AddSecurity(configuration);
         services.AddFastEndpoints();
         services.AddBloggingContext(configuration);
     }
