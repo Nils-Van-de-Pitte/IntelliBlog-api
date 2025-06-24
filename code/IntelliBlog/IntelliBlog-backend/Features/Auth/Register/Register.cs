@@ -8,10 +8,10 @@ namespace IntelliBlog_backend.Features.Auth.Register;
 
 public static class Register
 {
-    public record UserReq(string FirstName, string LastName, string Email, string Password);
-    public record UserRes(string Message);
+    public record RegisterReq(string FirstName, string LastName, string Email, string Password);
+    public record RegisterRes(string Message);
 
-    public sealed class Endpoint(BloggingContext context, IPasswordHasher passwordHasher) : Endpoint<UserReq, UserRes>
+    public sealed class Endpoint(BloggingContext context, IPasswordHasher passwordHasher) : Endpoint<RegisterReq, RegisterRes>
     {
         
         private readonly BloggingContext _context = context;
@@ -29,11 +29,11 @@ public static class Register
             );
         }
         
-        /// Handles the user registration userReq and processes the creation of a new user.
-        /// <param name="userReq">The user registration userReq containing Name, Email, and Password.</param>
+        /// Handles the user registration registerReq and processes the creation of a new user.
+        /// <param name="registerReq">The user registration registerReq containing Name, Email, and Password.</param>
         /// <param name="ct">The cancellation token for the asynchronous operation.</param>
         /// <return>A task representing the asynchronous operation that returns a response with the newly created user details.</return>
-        public override async Task HandleAsync(UserReq userReq, CancellationToken ct)
+        public override async Task HandleAsync(RegisterReq registerReq, CancellationToken ct)
         {
             var defaultRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "user", ct);
 
@@ -46,11 +46,11 @@ public static class Register
             var user = new User
             {
                 Id = Guid.NewGuid(),
-                Firstname = userReq.FirstName,
-                LastName = userReq.LastName,
-                Email = userReq.Email,
+                Firstname = registerReq.FirstName,
+                LastName = registerReq.LastName,
+                Email = registerReq.Email,
                 Role = defaultRole,
-                Password = _passwordHasher.HashPassword(userReq.Password),
+                Password = _passwordHasher.HashPassword(registerReq.Password),
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
@@ -58,11 +58,11 @@ public static class Register
             _context.Users.Add(user);
             await _context.SaveChangesAsync(ct);
             
-            await SendAsync(new UserRes("User has been successfully created!"), 201, ct);
+            await SendAsync(new RegisterRes("User has been successfully created!"), 201, ct);
         }
     }
     
-    public class Validation : Validator<UserReq>
+    public class Validation : Validator<RegisterReq>
     {
         public Validation()
         {

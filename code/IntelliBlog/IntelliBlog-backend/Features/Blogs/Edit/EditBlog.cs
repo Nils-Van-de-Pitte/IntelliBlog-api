@@ -7,13 +7,13 @@ namespace IntelliBlog_backend.Features.Blogs.Edit;
 
 public class EditBlog
 {
-    public record BlogReq(string Title, string Description);
-    public record BlogRes(string Message);
+    public record EditBlogReq(string Title, string Description);
+    public record EditBlogRes(string Message);
 
     /// Represents an endpoint for editing an existing blog.
     /// This endpoint handles HTTP PATCH requests to update a blog's title and description.
     /// It also enforces validation rules for the request payload and applies rate limiting.
-    public sealed class Endpoint(BloggingContext context) : Endpoint<BlogReq, BlogRes>
+    public sealed class Endpoint(BloggingContext context) : Endpoint<EditBlogReq, EditBlogRes>
     {
         private readonly BloggingContext _context = context;
 
@@ -34,7 +34,7 @@ public class EditBlog
         /// <param name="req">The request object containing the new title and description of the blog.</param>
         /// <param name="ct">The cancellation token to propagate notification of request cancellation.</param>
         /// <return>A task representing the asynchronous operation.</return>
-        public override async Task HandleAsync(BlogReq req, CancellationToken ct)
+        public override async Task HandleAsync(EditBlogReq req, CancellationToken ct)
         {
             try
             {
@@ -53,7 +53,7 @@ public class EditBlog
                 _context.Blogs.Update(blog);
                 await _context.SaveChangesAsync(ct);
 
-                await SendAsync(new BlogRes("Blog has been successfully updated!"), 200, ct);
+                await SendAsync(new EditBlogRes("Blog has been successfully updated!"), 200, ct);
             }
             catch (Exception e)
             {
@@ -69,7 +69,7 @@ public class EditBlog
     /// Provides validation rules for editing a blog request payload.
     /// This class ensures that the title and description of the blog meet specified constraints
     /// such as non-emptiness and length limits.
-    public class Validation : Validator<BlogReq>
+    public class Validation : Validator<EditBlogReq>
     {
         /// Defines the validation rules for the `EditBlog` feature.
         /// Ensures that the `Title` and `Description` fields in the blog update request meet specific requirements,
