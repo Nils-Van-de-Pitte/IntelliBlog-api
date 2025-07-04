@@ -25,9 +25,12 @@ public sealed class User
     public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; init; }
     public string FullName => $"{Firstname} {LastName}";
-    public ICollection<Blog> Blogs { get; set; } = new List<Blog>();
+    public ICollection<Post> Posts { get; set; } = new List<Post>();
+    public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+    public ICollection<Like> Likes { get; set; } = new List<Like>();
 }
-public sealed class Blog
+// DEPRECATED
+/*public sealed class Blog
 {
     public Guid Id { get; init; }
     [MaxLength(20)]
@@ -38,7 +41,7 @@ public sealed class Blog
     public ICollection<Post> Posts { get; set; } = new List<Post>();
     public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; init; } 
-}
+}*/
 public sealed class Post
 {
     public Guid Id { get; init; }
@@ -46,9 +49,28 @@ public sealed class Post
     public required string Title { get; set; }
     [MaxLength(20)]
     public required string Content { get; set; }
+    public required Guid UserId { get; set; }
     [MaxLength(20)]
     public required int Likes { get; set; }
-    public required Guid BlogId { get; set; }
     public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; init; }
+}
+
+public sealed class Comment
+{
+    public Guid Id { get; init; }
+    [MaxLength(1000)]
+    public required string Content { get; set; }
+    public required Guid PostId { get; set; }
+    public required Post Post { get; set; }
+    public required Guid UserId { get; set; }
+    public required DateTime CreatedAt { get; init; }
+}
+
+public sealed class Like
+{
+    public Guid Id { get; init; }
+    public required Guid PostId { get; set; }
+    public required Guid UserId { get; set; }
+    public required DateTime CreatedAt { get; init; }
 }

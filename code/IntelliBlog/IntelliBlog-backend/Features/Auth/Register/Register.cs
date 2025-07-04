@@ -39,6 +39,7 @@ public static class Register
 
             if (defaultRole == null)
             {
+                AddError("Default role is not found");
                 await SendErrorsAsync(404, ct);
                 return;
             }
