@@ -12,7 +12,6 @@ public class GetSingleUser
         public required string FullName { get; init; }
         public required string Email { get; init; }
         public required string RoleName { get; init; }
-        public required List<string> Blogs { get; init; }
     }
     
     public record UserRes(string Message, UserResDto User);
@@ -32,14 +31,13 @@ public class GetSingleUser
 
         /// Handles the execution logic for the endpoint to retrieve a single user.
         /// This method processes the request, fetches the user details based on the provided user ID in the route, and sends the appropriate response.
-        /// <param name="req">The request containing the user response format details.</param>
         /// <param name="ct">A cancellation token to propagate notification that the operation should be canceled.</param>
         /// <return>An asynchronous task representing the operation to send a user response or error message.</return>
         public override async Task HandleAsync(CancellationToken ct)
         {
             var userId = Route<Guid>("userId");
             
-            var user = await _context.Users.Include(x => x.Role).Include(x => x.Blogs).FirstOrDefaultAsync(x => x.Id == userId, ct);
+            var user = await _context.Users.Include(x => x.Role).FirstOrDefaultAsync(x => x.Id == userId, ct);
             if (user == null)
             {
                 AddError("User does not exist.");
@@ -53,7 +51,6 @@ public class GetSingleUser
                 FullName = user.FullName,
                 Email = user.Email,
                 RoleName = user.Role.Name,
-                Blogs = user.Blogs.Select(x => x.Title).ToList()
             };
             await SendAsync(new UserRes("User found!", userResponseDto), 200, ct);
         }

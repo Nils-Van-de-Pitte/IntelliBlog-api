@@ -1,4 +1,5 @@
-﻿using FastEndpoints;
+﻿using System.Security.Claims;
+using FastEndpoints;
 using FluentValidation;
 using IntelliBlog_backend.Infrastructure.Database;
 
@@ -58,7 +59,7 @@ public class CreatePost
                 }
                 
                 // Hardcode for testing purposes
-                var blogId = Guid.Parse("29b038ca-2981-4d61-b8c8-19e294bc7b6f"); //TODO when you find the JWT, insert the ID here instead
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
                 var post = new Post
                 {
@@ -66,7 +67,7 @@ public class CreatePost
                     Title = request.Title,
                     Content = request.Content,
                     Likes = 0,
-                    BlogId = blogId,
+                    UserId = Guid.Parse(userId),
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };
