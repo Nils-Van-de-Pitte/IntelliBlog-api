@@ -27,6 +27,7 @@ public static class Authentication
     /// <param name="app">The web application to configure with security middleware.</param>
     public static void UseSecurity(this WebApplication app)
     {
+        app.UseCors("CorsPolicy");
         app.UseMiddleware<JwtFromCookieMiddleware>();
         app.UseAuthentication();
         app.UseAuthorization();
